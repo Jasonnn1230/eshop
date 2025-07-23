@@ -13,9 +13,15 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000, // 等待 30 秒再 timeout
+  socketTimeoutMS: 45000           // socket timeout 也拉長
+})
   .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error(err));
+  .catch((err) => console.error('MongoDB connection error:', err));
+
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
