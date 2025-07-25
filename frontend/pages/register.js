@@ -14,12 +14,19 @@ export default function RegisterPage() {
     setError("");
 
     try {
+      let backendRole = "user";
+      if (role === "seller") {
+        backendRole = "admin";
+      }
+      console.log("🧪 註冊送出的角色:", backendRole);
+
+
       const res = await fetch("https://eshop-mooi.onrender.com/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, password, role }),
+        body: JSON.stringify({ name, email, password, role:backendRole }),
       });
 
       if (!res.ok) {

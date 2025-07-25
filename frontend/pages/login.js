@@ -26,7 +26,23 @@ export default function LoginPage() {
 
       const data = await res.json();
       localStorage.setItem("token", data.token); // 儲存 JWT
-      alert("登入成功！");
+      const mappedRole =
+        data.user.role === "user" ? "buyer" :
+        data.user.role === "admin" ? "seller" :
+        data.user.role;
+
+      localStorage.setItem("role", mappedRole);
+
+      alert("Login Successfully!");
+
+      // 根據 **mappedRole** 導向
+      if (mappedRole === "seller") {
+        window.location.href = "/seller-home";
+      } else {
+        window.location.href = "/buyer-home";
+      }
+
+
     } catch (err) {
       setError(err.message);
     }
