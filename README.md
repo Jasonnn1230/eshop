@@ -3,8 +3,7 @@
 A simple full-stack e-commerce web app with buyer and seller roles, image upload via Cloudinary, shopping cart, and order processing.
 
 ## Demo
-
-**Frontend**: [https://eshop-frontend.vercel.app](https://eshop-frontend.vercel.app)  
+ 
 **Backend API**: [https://eshop-mooi.onrender.com/api/products](https://eshop-mooi.onrender.com/api/products)
 
 
