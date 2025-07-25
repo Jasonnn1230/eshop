@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 // 註冊
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     // 檢查是否已存在
     const existingUser = await User.findOne({ email });
@@ -20,7 +20,8 @@ const registerUser = async (req, res) => {
     const newUser = await User.create({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      role: role || 'user'
     });
 
     res.status(201).json({ message: '註冊成功' });
