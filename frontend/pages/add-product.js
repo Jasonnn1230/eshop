@@ -24,10 +24,10 @@ export default function AddProductPage() {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET);
+    formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
 
     const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
       {
         method: "POST",
         body: formData,
@@ -39,12 +39,34 @@ export default function AddProductPage() {
     setUploading(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submit product:", form);
-    alert("Product submitted (mock only)");
-    router.push("/");
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!form.name || !form.price || !form.image || !form.description) {
+    alert("Please fill in all fields");
+    return;
+  }
+
+  try {
+  const res = await fetch("/api/products", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(form),
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Something went wrong");
+
+  console.log("Product created:", data);
+  router.push("/");
+} catch (error) {
+  console.error("POST /api/products error:", error);
+  alert("Something went wrong");
+}
+
+};
+
 
   return (
     <div className="min-h-screen p-8 bg-gray-100">

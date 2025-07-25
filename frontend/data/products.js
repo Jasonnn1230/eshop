@@ -1,17 +1,6 @@
 // frontend/data/products.js
-export const products = [
-  {
-    id: 1,
-    name: "T-Shirt",
-    price: 19.99,
-    image: "/images/shirt.jpg",
-    description: "A comfortable cotton t-shirt.",
-  },
-  {
-    id: 2,
-    name: "Hoodie",
-    price: 29.99,
-    image: "/images/hoodie.jpg",
-    description: "A warm hoodie for cold days.",
-  },
-];
+export async function getProducts() {
+  const res = await fetch("/api/products");
+  if (!res.ok) throw new Error("Failed to fetch products");
+  return res.json();
+}
