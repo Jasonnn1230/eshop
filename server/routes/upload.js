@@ -1,3 +1,4 @@
+require('dotenv').config(); // ← 加上這行
 const express = require('express');
 const router = express.Router();
 const { v2: cloudinary } = require('cloudinary');
@@ -24,3 +25,4 @@ router.post('/', async (req, res) => {
 });
 
 module.exports = router;
+
