@@ -35,3 +35,5 @@ app.use('/api/products', productRoutes);
 const orderRoutes = require('./routes/orderRoutes');
 app.use('/api/orders', orderRoutes);
 
+const uploadRoutes = require("./routes/upload");
+app.use("/api/upload", uploadRoutes);
