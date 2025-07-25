@@ -1,4 +1,3 @@
-// frontend/pages/index.js
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
@@ -16,5 +15,5 @@ export default function IndexRedirect() {
     }
   }, [router]);
 
-  return null; // 可改為 loading 畫面
+  return null; 
 }

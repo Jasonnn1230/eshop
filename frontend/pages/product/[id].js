@@ -62,7 +62,7 @@ export default function ProductDetailPage() {
       <p className="text-gray-700 text-xl">${product.price}</p>
       <p className="mt-2">{product.description}</p>
 
-      {/* ✅ Add to Cart button */}
+      {/* Add to Cart button */}
       <button
         onClick={handleAddToCart}
         className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"

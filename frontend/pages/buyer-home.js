@@ -30,7 +30,7 @@ export default function BuyerHome() {
           >
             <Link href={`/product/${product._id}`}>
               <img
-                src={product.image}
+                src={product.images?.[0] || "/placeholder.jpg"}
                 alt={product.name}
                 className="w-full h-48 object-cover"
               />

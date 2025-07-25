@@ -1,4 +1,3 @@
-// frontend/pages/checkout.js
 import { useState, useEffect } from "react";
 
 export default function Checkout() {

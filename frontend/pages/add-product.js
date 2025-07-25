@@ -40,7 +40,7 @@ export default function AddProductPage() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || "Upload failed");
 
-        // 將圖片網址加入 images 陣列
+        // Adding image into array of images
         setForm((prevForm) => ({
           ...prevForm,
           images: [...prevForm.images, data.url],
@@ -63,7 +63,7 @@ export default function AddProductPage() {
     const { name, price, description, category, stock, images } = form;
 
     if (!name || !price || !description || !category || !stock || images.length === 0) {
-      alert("請填寫所有欄位，並上傳至少一張圖片");
+      alert("Please fill al the field!");
       return;
     }
 

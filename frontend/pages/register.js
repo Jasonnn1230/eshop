@@ -18,7 +18,7 @@ export default function RegisterPage() {
       if (role === "seller") {
         backendRole = "admin";
       }
-      console.log("🧪 註冊送出的角色:", backendRole);
+      console.log("the role:", backendRole);
 
 
       const res = await fetch("https://eshop-mooi.onrender.com/api/auth/register", {
@@ -35,7 +35,7 @@ export default function RegisterPage() {
       }
 
       const data = await res.json();
-      alert("註冊成功，請登入");
+      alert("Register successfully, plz login!");
       router.push("/login");
     } catch (err) {
       setError(err.message);
@@ -44,10 +44,10 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold mb-6">註冊帳號</h1>
+      <h1 className="text-3xl font-bold mb-6">Register</h1>
       <form onSubmit={handleRegister} className="bg-white p-6 rounded shadow max-w-md">
         <div className="mb-4">
-          <label className="block mb-1">名稱</label>
+          <label className="block mb-1">Username</label>
           <input
             type="text"
             className="w-full border p-2 rounded"
@@ -69,7 +69,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="mb-4">
-          <label className="block mb-1">密碼</label>
+          <label className="block mb-1">Password</label>
           <input
             type="password"
             className="w-full border p-2 rounded"
@@ -80,14 +80,14 @@ export default function RegisterPage() {
         </div>
 
         <div className="mb-4">
-          <label className="block mb-1">身份</label>
+          <label className="block mb-1">User Type</label>
           <select
             className="w-full border p-2 rounded"
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
-            <option value="buyer">買家</option>
-            <option value="seller">賣家</option>
+            <option value="buyer">Buyer</option>
+            <option value="seller">Seller</option>
           </select>
         </div>
 
@@ -96,7 +96,7 @@ export default function RegisterPage() {
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          註冊
+          Get Started
         </button>
       </form>
     </div>
