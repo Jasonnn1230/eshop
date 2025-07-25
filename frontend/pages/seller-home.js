@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { getProducts } from "../data/products";
 
 export default function SellerHome() {
   const [products, setProducts] = useState([]);
@@ -7,7 +8,7 @@ export default function SellerHome() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const res = await fetch("/api/products");
+        const res = await fetch("https://eshop-mooi.onrender.com/api/products");
         const data = await res.json();
         setProducts(data);
       } catch (err) {
@@ -34,7 +35,7 @@ export default function SellerHome() {
           >
             <Link href={`/product/${product._id}`}>
               <img
-                src={product.image}
+                src={product.images?.[0] || "/placeholder.jpg"}
                 alt={product.name}
                 className="w-full h-48 object-cover"
               />

@@ -8,7 +8,8 @@ export default function BuyerHome() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const data = await getProducts();
+        const res = await fetch("https://eshop-mooi.onrender.com/api/products");
+        const data = await res.json();
         setProducts(data);
       } catch (err) {
         console.error("Failed to load products:", err);

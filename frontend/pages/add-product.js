@@ -6,8 +6,10 @@ export default function AddProductPage() {
   const [form, setForm] = useState({
     name: "",
     price: "",
-    image: "",
     description: "",
+    category: "",
+    stock: "",
+    images: [],
   });
 
   const [uploading, setUploading] = useState(false);
@@ -22,51 +24,76 @@ export default function AddProductPage() {
 
     setUploading(true);
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64Image = reader.result;
 
-    const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-      {
-        method: "POST",
-        body: formData,
+      try {
+        const res = await fetch("https://eshop-mooi.onrender.com/api/upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ image: base64Image }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Upload failed");
+
+        // 將圖片網址加入 images 陣列
+        setForm((prevForm) => ({
+          ...prevForm,
+          images: [...prevForm.images, data.url],
+        }));
+      } catch (err) {
+        console.error("Image upload failed:", err);
+        alert("Image upload failed");
+      } finally {
+        setUploading(false);
       }
-    );
+    };
 
-    const data = await res.json();
-    setForm({ ...form, image: data.secure_url });
-    setUploading(false);
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!form.name || !form.price || !form.image || !form.description) {
-    alert("Please fill in all fields");
-    return;
-  }
+    e.preventDefault();
+    const token = localStorage.getItem("token");
 
-  try {
-  const res = await fetch("/api/products", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(form),
-  });
+    const { name, price, description, category, stock, images } = form;
 
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Something went wrong");
+    if (!name || !price || !description || !category || !stock || images.length === 0) {
+      alert("請填寫所有欄位，並上傳至少一張圖片");
+      return;
+    }
 
-  console.log("Product created:", data);
-  router.push("/");
-} catch (error) {
-  console.error("POST /api/products error:", error);
-  alert("Something went wrong");
-}
+    try {
+      const res = await fetch("https://eshop-mooi.onrender.com/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name,
+          price: parseFloat(price),
+          description,
+          category,
+          stock: parseInt(stock),
+          images,
+        }),
+      });
 
-};
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Something went wrong");
 
+      console.log("Product created:", data);
+      router.push("/");
+    } catch (error) {
+      console.error("POST /api/products error:", error);
+      alert("Something went wrong");
+    }
+  };
 
   return (
     <div className="min-h-screen p-8 bg-gray-100">
@@ -81,9 +108,23 @@ export default function AddProductPage() {
         />
         <input
           name="price"
-          placeholder="Price (e.g. $19.99)"
+          placeholder="Price (e.g. 89.99)"
           className="w-full p-2 border"
           value={form.price}
+          onChange={handleChange}
+        />
+        <input
+          name="category"
+          placeholder="Category (e.g. Shoes)"
+          className="w-full p-2 border"
+          value={form.category}
+          onChange={handleChange}
+        />
+        <input
+          name="stock"
+          placeholder="Stock Quantity"
+          className="w-full p-2 border"
+          value={form.stock}
           onChange={handleChange}
         />
 
@@ -94,8 +135,12 @@ export default function AddProductPage() {
           className="w-full"
         />
         {uploading && <p>Uploading image...</p>}
-        {form.image && (
-          <img src={form.image} alt="Preview" className="w-32 h-32 object-cover" />
+        {form.images.length > 0 && (
+          <div className="flex gap-2 flex-wrap">
+            {form.images.map((url, i) => (
+              <img key={i} src={url} alt={`img-${i}`} className="w-24 h-24 object-cover" />
+            ))}
+          </div>
         )}
 
         <textarea
@@ -105,6 +150,7 @@ export default function AddProductPage() {
           value={form.description}
           onChange={handleChange}
         ></textarea>
+
         <button
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
