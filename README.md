@@ -11,6 +11,6 @@ A simple full-stack e-commerce web app with buyer and seller roles, image upload
 - **Frontend**: Next.js, Tailwind CSS
 - **Backend**: Express.js, MongoDB
 - **Auth**: JWT, Middleware (role-based)
-- **Deployment**: Vercel (frontend), Render (backend)
+- **Deployment**: Render (backend)
 - **Containerization**: Docker (for backend API ）
 
